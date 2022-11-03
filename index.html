@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Anthony's Weather App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+
+<body>
+    <!--Hero header-->
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <p class="title">
+                Anthony's Weather App
+            </p>
+            <p class="subtitle">
+                "Blame it on the rain"
+            </p>
+        </div>
+    </section>
+
+    <!--making main content 2 columns-->
+    <div class="columns">
+        <!--First column contains search section and top cities-->
+        <div class="column is-one-quarter">
+            <!--Search panel top left-->
+            <article class="panel is-primary">
+                <!--add margin in CSS? and a bottom border-->
+                <p class="panel-heading">
+                    Search for a city:
+                    <!--center this in CSS-->
+                </p>
+                <div class="panel-block">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary" type="text" placeholder="City">
+                        <span class="icon is-left">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </span>
+                    </p>
+                </div>
+                <button class="button is-primary is-rounded is-medium is-fullwidth" id = "searchBtn">Search</button>
+            </article>
+            <div class="box" id = "buttons" >
+                <h2>Recent Search</h2>
+                <div class="buttons are-medium" id = "recent-city">
+                    Recent Search
+                </div>
+            </div>
+            
+
+        </div>
+
+        <!--second column-->
+        <!--Contains weather results-->
+        <div class="column">
+            <!--Weather summary for city chosen-->
+            <div class="column" id = "current"> <!--needs a border-->
+            </div>
+
+            <!--5 cards for each day forecast in a new set of columns-->
+            <div class="columns">
+                <div class="column">
+                    <div class="box" id = "day1" >
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="box" id = "day2" >
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="box" id = "day3" >
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="box" id = "day4" >
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="box" id = "day5" >
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Added link to the jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script type="text/javascript" src="./assets/script.js"></script>
+</body>
+
+</html>

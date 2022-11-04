@@ -1,0 +1,14 @@
+.is-primary {
+    margin-bottom: 2px;
+}
+
+.panel {
+    border-style: solid;
+    border-color: black;
+}
+
+#buttons {
+    border-style: solid;
+    border-color: black;
+}
+

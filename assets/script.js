@@ -115,7 +115,7 @@ var displayCurrentWeather = function (currentData) {
     currentWind.html("<b>Wind: </b>" + currentData.wind.speed + "MPH");
     var currentHumidity = $("#humidity");
     currentHumidity.html("<b>Humidity: </b>" + currentData.main.humidity);
-    
+    $("#current").css("border-style","solid");
 
 }
 
@@ -138,7 +138,7 @@ var displayForecastWeather = function (forecastData, dayNum) {
     forecastWind.html("<b>Wind: </b>" + forecastData.wind.speed);
     var forecastHumidity = forecastCard.children(".humidity-div");
     forecastHumidity.html("<b>Humidity: </b>" + forecastData.main.humidity);
-
+    $("#day" + dayNum).css({"border-style":"solid","margin-top":"4px"});
 }
 
 $("#searchBtn").on('click', citySearch);

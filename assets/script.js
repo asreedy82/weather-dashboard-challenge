@@ -129,7 +129,7 @@ var displayForecastWeather = function (forecastData, dayNum) {
     forecastWeatherImg.attr('src', 'https://openweathermap.org/img/wn/' + forecastData.weather[0].icon + '@2x.png')
     var forecastDate = forecastCard.children("h3");
     var forecastDateFormatted = moment.unix(forecastData.dt).format("M/D/YYYY");
-    forecastDate.html("<b>" + forecastData.dt_txt + "</b>");
+    forecastDate.html("<b>" + forecastDateFormatted + "</b>");
     console.log(forecastDateFormatted);
     console.log(forecastData.dt);
     var forecastTemp = forecastCard.children(".temp-div");
@@ -138,7 +138,7 @@ var displayForecastWeather = function (forecastData, dayNum) {
     forecastWind.html("<b>Wind: </b>" + forecastData.wind.speed);
     var forecastHumidity = forecastCard.children(".humidity-div");
     forecastHumidity.html("<b>Humidity: </b>" + forecastData.main.humidity);
-    $("#day" + dayNum).css({"border-style":"solid","margin-top":"4px"});
+    $(".block").html("5 Day Forecast:");
 }
 
 $("#searchBtn").on('click', citySearch);

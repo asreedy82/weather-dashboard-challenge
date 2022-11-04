@@ -5,10 +5,18 @@
 .panel {
     border-style: solid;
     border-color: black;
+    margin-left: 3%;
 }
 
 #buttons {
     border-style: solid;
     border-color: black;
+    font-size: large;
+    margin-left: 3%;
 }
 
+.block {
+    margin-top: 12px;
+    font-size: large;
+    font-weight: bold;
+}

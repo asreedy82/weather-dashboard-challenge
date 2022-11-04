@@ -1,7 +1,6 @@
 //to do
 //figure out recent searches
 //figure out daily forecast solution
-//figure out how to fix repeat searches
 
 //API key
 var apiKey = 'a5489fb180f98555e7254681a3bf11f7';
@@ -18,6 +17,7 @@ var citySearch = function (event) {
         getLatLon(city);
         cities.push(city);
         localStorage.setItem("cities", JSON.stringify(cities));
+        setRecentCities();
     }
 }
 
@@ -49,6 +49,20 @@ var getLatLon = function (city) {
 }
 
 
+//function from Nelio
+function get5DaysForecast(apiResponse) {
+    return apiResponse.list.reduce(function(days,current) {
+        var currentDate=current.dt_txt.split(" ")[0];
+        if(!days.find(function(day) {
+            return day.dt_txt.includes(currentDate);
+        })) {
+            return [...days,current];
+        }
+        return days;
+    },[])
+}
+
+
 //get weather forecast from forecast API
 var getWeatherForecast = function (latLongs) {
     var forecastApiUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + latLongs.lat + '&lon=' + latLongs.lon + '&appid=' + apiKey + '&units=imperial';
@@ -56,10 +70,12 @@ var getWeatherForecast = function (latLongs) {
         .then(function (response) {
             if (response.ok) {
                 response.json().then(function (data) {
+                    var fiveDaysForecast = get5DaysForecast(data);
+                    console.log(fiveDaysForecast);
                     console.log(data);
                     console.log(data.list[0]);
                     for (i = 0; i < 6; i ++){
-                        displayForecastWeather(data.list[i], i);
+                        displayForecastWeather(fiveDaysForecast[i], i);
                     }
                     
                 })
@@ -88,59 +104,41 @@ var currentWeatherTab = $("#current");
 
 
 var displayCurrentWeather = function (currentData) { 
-    var currentWeatherImg = $("<img>"); 
+    var currentWeatherImg = $("#icon"); 
     currentWeatherImg.attr('src', 'https://openweathermap.org/img/wn/' + currentData.weather[0].icon + '@2x.png');
-    var currentWeatherTitle = $('<p></p>');
+    var currentWeatherTitle = $("#title");
     currentWeatherTitle.html("<b>" + currentData.name + ": </b>" + currentDateFormat);
     currentWeatherTitle.css("fontSize", 30);
-    var currentTemp = $("<div>");
+    var currentTemp = $("#temp");
     currentTemp.html("<b>Temp: </b>" + currentData.main.temp + "\u00B0F");
-    var currentWind = $("<div>");
+    var currentWind = $("#wind");
     currentWind.html("<b>Wind: </b>" + currentData.wind.speed + "MPH");
-    var currentHumidity = $("<div>");
+    var currentHumidity = $("#humidity");
     currentHumidity.html("<b>Humidity: </b>" + currentData.main.humidity);
+    
 
-    //city name and date
-    currentWeatherTab.append(currentWeatherTitle);
-    //weather icon
-    currentWeatherTitle.append(currentWeatherImg);
-    //temp
-    currentWeatherTab.append(currentTemp);
-    //wind speed
-    currentWeatherTab.append(currentWind);
-    //humidity
-    currentWeatherTab.append(currentHumidity);
 }
 
-
+var clearExistingCurrentWeather = function (title) {
+    title.text("");
+}
 
 var displayForecastWeather = function (forecastData, dayNum) {
     var forecastCard = $("#day" + dayNum);
-    var forecastWeatherImg = $("<img>");
+    var forecastWeatherImg = forecastCard.children("img");
     forecastWeatherImg.attr('src', 'https://openweathermap.org/img/wn/' + forecastData.weather[0].icon + '@2x.png')
-    var forecastDate = $("<h3>");
+    var forecastDate = forecastCard.children("h3");
     var forecastDateFormatted = moment.unix(forecastData.dt).format("M/D/YYYY");
     forecastDate.html("<b>" + forecastData.dt_txt + "</b>");
     console.log(forecastDateFormatted);
     console.log(forecastData.dt);
-    var forecastTemp = $("<div>");
+    var forecastTemp = forecastCard.children(".temp-div");
     forecastTemp.html("<b>Temp: </b>" + forecastData.main.temp + "\u00B0F");
-    var forecastWind = $("<div>");
+    var forecastWind = forecastCard.children(".wind-div");
     forecastWind.html("<b>Wind: </b>" + forecastData.wind.speed);
-    var forecastHumidity = $("<div>");
+    var forecastHumidity = forecastCard.children(".humidity-div");
     forecastHumidity.html("<b>Humidity: </b>" + forecastData.main.humidity);
 
-
-    //date
-    forecastCard.append(forecastDate);
-    //icon
-    forecastCard.append(forecastWeatherImg);
-    //temp
-    forecastCard.append(forecastTemp);
-    //wind
-    forecastCard.append(forecastWind);
-    //humidity
-    forecastCard.append(forecastHumidity);
 }
 
 $("#searchBtn").on('click', citySearch);

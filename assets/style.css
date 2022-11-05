@@ -2,17 +2,21 @@
     margin-bottom: 2px;
 }
 
+h2 {
+    margin-bottom: 8px;
+}
+
 .panel {
     border-style: solid;
     border-color: black;
-    margin-left: 3%;
+    margin-left: 5px;
 }
 
 #buttons {
     border-style: solid;
     border-color: black;
     font-size: large;
-    margin-left: 3%;
+    margin-left: 5px;
 }
 
 .block {

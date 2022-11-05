@@ -1,6 +1,3 @@
-//to do
-//figure out recent searches
-//figure out daily forecast solution
 
 //API key
 var apiKey = 'a5489fb180f98555e7254681a3bf11f7';
@@ -8,19 +5,34 @@ var apiKey = 'a5489fb180f98555e7254681a3bf11f7';
 //set city, state based on search
 var cityInput = $(".input");
 
+//declare cities var for saving
 var cities = [];
 
+//function to get city input that then runs function to get lat/long
 var citySearch = function (event) {
     event.preventDefault();
     var city = cityInput.val();
     if (city) {
         getLatLon(city);
-        cities.push(city);
-        localStorage.setItem("cities", JSON.stringify(cities));
+        //inserting recent city into array at front
+        cities.unshift(city);
+        saveCities(cities);
         setRecentCities();
+        cityInput.val('');
     }
 }
 
+//saving cities and limiting to 10
+var saveCities = function (cityArray) {
+    if (cityArray.length < 10) {
+        localStorage.setItem("cities", JSON.stringify(cityArray));
+    } else {
+        cityArray.length = 10;
+        console.log(cityArray);
+        localStorage.setItem("cities", JSON.stringify(cityArray));
+    }
+    
+}
 
 //set city, state based on shortcut button
 var getRecentCity = function (event) {
@@ -39,8 +51,6 @@ var getLatLon = function (city) {
             if (response.ok) {
                 console.log(response);
                 response.json().then(function (data) {
-                    //store city, state search and call forecast API
-                    localStorage.setItem("City", city);
                     getCurrentWeather(data[0]);
                     getWeatherForecast(data[0]);
                 })
@@ -119,9 +129,6 @@ var displayCurrentWeather = function (currentData) {
 
 }
 
-var clearExistingCurrentWeather = function (title) {
-    title.text("");
-}
 
 var displayForecastWeather = function (forecastData, dayNum) {
     var forecastCard = $("#day" + dayNum);
@@ -130,8 +137,8 @@ var displayForecastWeather = function (forecastData, dayNum) {
     var forecastDate = forecastCard.children("h3");
     var forecastDateFormatted = moment.unix(forecastData.dt).format("M/D/YYYY");
     forecastDate.html("<b>" + forecastDateFormatted + "</b>");
-    console.log(forecastDateFormatted);
-    console.log(forecastData.dt);
+    //console.log(forecastDateFormatted);
+    //console.log(forecastData.dt);
     var forecastTemp = forecastCard.children(".temp-div");
     forecastTemp.html("<b>Temp: </b>" + forecastData.main.temp + "\u00B0F");
     var forecastWind = forecastCard.children(".wind-div");
@@ -141,8 +148,7 @@ var displayForecastWeather = function (forecastData, dayNum) {
     $(".block").html("5 Day Forecast:");
 }
 
-$("#searchBtn").on('click', citySearch);
-$("#buttons").on('click', getRecentCity);
+
 
 //set recent cities
 function setRecentCities () {
@@ -151,24 +157,37 @@ function setRecentCities () {
     if (storedCities !== null){
         cities = storedCities;
     }
-
     console.log(cities);
-
-    displayRecentCities();
+    displayRecentCities(cities);
 }
 
 
 //display recent cities
 //<button class="button is-rounded is-fullwidth" data-city = "Baltimore">Baltimore</button>
-var displayRecentCities = function () {
-    for (var i = 0; i < cities.length; i ++) {
-    var recentCityButton = $("#recent-city");
-        recentCityButton.html('<button class="button is-rounded is-fullwidth" data-city = "' + cities[i] + '">' +cities[i] + '</button>');
-        //append button to class ".buttons"
+
+var displayRecentCities = function (lastCities) {
+    console.log(lastCities);
+    if (lastCities) {
+        for (var i = 0; i < lastCities.length; i ++) {
+            var recentCityButton = $("#recent-city" + i);
+                recentCityButton.html('<button class="button is-rounded is-fullwidth" data-city = "' + lastCities[i] + '">' +lastCities[i] + '</button>');
+                //append button to class ".buttons"
+        }
     }
     
-
+    
 }
+
+//clear history
+var clearCities = function (){
+    var clearedCities = [];
+    saveCities(clearedCities);
+    location.reload();
+}
+
+$("#searchBtn").on('click', citySearch);
+$("#buttons").on('click', getRecentCity);
+$("#clear-button").on('click', clearCities);
 
 //set and display recent cities on page load
 setRecentCities ();

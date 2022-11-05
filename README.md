@@ -14,7 +14,7 @@ N/A
 
 The webpage is intended to give a user current weather and a 5-day forecast of the weather in a city that they enter as a search. They can also see their recent search and click on that button to view recent weather.
 
-![Screen shot of main section of website](assets/images/weather-app-ss1.png)
+![Screen shot of main section of website](assets/images/weather-app-ss2.png)
 
 ## Credits
 

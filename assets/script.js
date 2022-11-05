@@ -34,7 +34,7 @@ var saveCities = function (cityArray) {
     
 }
 
-//set city, state based on shortcut button
+//get recent city lat/long to then get weather
 var getRecentCity = function (event) {
     var recentCity = $(event.target).data('city');
     console.log(recentCity);
@@ -51,6 +51,7 @@ var getLatLon = function (city) {
             if (response.ok) {
                 console.log(response);
                 response.json().then(function (data) {
+                    //get current and forecasted weather
                     getCurrentWeather(data[0]);
                     getWeatherForecast(data[0]);
                 })
@@ -59,7 +60,7 @@ var getLatLon = function (city) {
 }
 
 
-//function from Nelio
+//function from Nelio to handle API giving 3-hour period data
 function get5DaysForecast(apiResponse) {
     return apiResponse.list.reduce(function(days,current) {
         var currentDate=current.dt_txt.split(" ")[0];
@@ -108,11 +109,12 @@ var getCurrentWeather = function (latLongs) {
         })
 }
 
+//moment js to convert the unix timestamp
 var currentDate = moment();
 var currentDateFormat = currentDate.format("ddd. MMM Do, YYYY");
 var currentWeatherTab = $("#current");
 
-
+//display current weather
 var displayCurrentWeather = function (currentData) { 
     var currentWeatherImg = $("#icon"); 
     currentWeatherImg.attr('src', 'https://openweathermap.org/img/wn/' + currentData.weather[0].icon + '@2x.png');
@@ -129,7 +131,7 @@ var displayCurrentWeather = function (currentData) {
 
 }
 
-
+//display forecasted weather
 var displayForecastWeather = function (forecastData, dayNum) {
     var forecastCard = $("#day" + dayNum);
     var forecastWeatherImg = forecastCard.children("img");
@@ -150,7 +152,7 @@ var displayForecastWeather = function (forecastData, dayNum) {
 
 
 
-//set recent cities
+//set recent cities and call on page load to populate recent cities
 function setRecentCities () {
     var storedCities = JSON.parse(localStorage.getItem("cities"));
 
@@ -162,9 +164,7 @@ function setRecentCities () {
 }
 
 
-//display recent cities
-//<button class="button is-rounded is-fullwidth" data-city = "Baltimore">Baltimore</button>
-
+//display recent 
 var displayRecentCities = function (lastCities) {
     console.log(lastCities);
     if (lastCities) {
@@ -178,7 +178,7 @@ var displayRecentCities = function (lastCities) {
     
 }
 
-//clear history
+//clear city search history
 var clearCities = function (){
     var clearedCities = [];
     saveCities(clearedCities);
